@@ -43,6 +43,7 @@ public class Brick implements Entity {
 		this.hp = 1;
 		this.dead = false;
 	}
+	
 
 	public int getX() {
 		return this.x;
@@ -70,7 +71,6 @@ public class Brick implements Entity {
 	
 	@Override
 	public void paint(Graphics g) {
-		g.setColor(Color.white);
 		g.setColor(Color.white);
 		g.fillRect(this.x, this.y, this.width, this.height);
 		
