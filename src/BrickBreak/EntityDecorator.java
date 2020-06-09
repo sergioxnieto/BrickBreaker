@@ -1,5 +1,3 @@
-package BrickBreak;
-
 import java.awt.Graphics;
 
 public abstract class EntityDecorator implements Entity {

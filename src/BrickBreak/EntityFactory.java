@@ -1,5 +1,3 @@
-package BrickBreak;
-
 public class EntityFactory {
 	public Entity getEntity(String entityType) {
 		if(entityType == null) {

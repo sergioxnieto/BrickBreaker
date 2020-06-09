@@ -1,5 +1,3 @@
-package BrickBreak;
-
 public class BricksGenerator {
 	
 	public Brick map[][];
