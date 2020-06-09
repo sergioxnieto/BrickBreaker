@@ -1,9 +1,11 @@
 package BrickBreak;
 
-public class Entity {
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
+public interface Entity {
 	
-	
-	
+	public void paint(Graphics g);
+	public Rectangle generateHitbox();
 	
 }
