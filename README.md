@@ -5,7 +5,7 @@
 Brick Break is a Java based application that I created for my CS100 final project. It's a version of the classic game where you move a paddle from left to right across the screen to save the ball from plummeting, while also destroying tiles to increase your score. It takes in user input to move the paddle, restart the game, and change the background color. It outputs a window that displays the game field along with all of the objects.
 
 ## Class Diagram
-![Class Diagram] [classDiagram]
+![Class Diagram][classDiagram]
 
 ## Getting Started
 
