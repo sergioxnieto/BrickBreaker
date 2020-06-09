@@ -11,14 +11,12 @@ public class Paddle implements Entity {
 	private int y;
 	private int width;
 	private int height;
-	private Rectangle hitbox; 
 	
 	Paddle() {
 		this.x = 300;
 		this.y = 550;
 		this.width = 100;
 		this.height = 8;
-		this.hitbox = generateHitbox();
 	}
 	
 	
@@ -28,10 +26,6 @@ public class Paddle implements Entity {
 	
 	public void moveRight() {
 		this.x += 20;
-	}
-	
-	public Rectangle getHitbox() {
-		return this.hitbox;
 	}
 	
 	public int getX() {
