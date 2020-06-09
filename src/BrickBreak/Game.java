@@ -15,6 +15,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 
 	private boolean play = false;
 	private int score = 0;
+	private int totalBricks = 28;
 	private Timer timer;
 	private int delay = 8;
 	
@@ -27,16 +28,10 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		timer.start();
 	}
 	
-	
 	// Intermediate instantiations until factory is setup
 	Paddle player = new Paddle();
 	Ball ball = new Ball();
 	Brick brick1 = new Brick();
-	Brick brick2 = new Brick(1);
-	Brick brick3 = new Brick(2);
-	Brick brick4 = new Brick(3);
-	
-	
 	
 	// Handles drawing features to the game window
 	public void paint(Graphics g) {
@@ -50,11 +45,9 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		// display ball
 		ball.paint(g);
 		
-		// display brick
-		brick1.paint(g);
-		brick2.paint(g);
-		brick3.paint(g);
-		brick4.paint(g);
+		// display brick(s)
+		if(!brick1.isDead())
+			brick1.paint(g);
 		
 		// display score
 		g.setColor(Color.white);
@@ -95,14 +88,33 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	// actionPerformed controls the game itself
 	public void actionPerformed(ActionEvent e) {
 		if(play) {
-			
-			
 			// Ball Movement across screen
 			// Detects a collision between the paddle and ball
 			if(ball.generateHitbox().intersects(player.generateHitbox())) {
 				ball.setYdir(-(ball.getYdir()));
 			}
 		
+			// Detect collision between ball and bricks
+			// Currently handles one brick need to update
+			// to handle more than one brick
+			if(ball.generateHitbox().intersects(brick1.generateHitbox())) {
+				// first check if the brick is alive
+				if(!brick1.isDead()) {
+					// kill normal brick // -1 hp to super brick
+					brick1.setHP(brick1.getHP() - 1);
+				
+					// ball redirection
+					// if ballRS hits brickLS or ballLS hits brickRS
+					if((ball.getX() + 19 <= brick1.getX()) || (ball.getX() >= brick1.getX() + brick1.getWidth())) {
+						ball.setXdir(-(ball.getXdir()));
+					}
+					else {
+						ball.setYdir(-(ball.getYdir()));
+					}
+					
+				}
+				
+			}
 			
 			// Changes the trajectory if it hits the borders
 			ball.setX(ball.getX() + ball.getXdir());
@@ -125,13 +137,13 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	}
 	
 	// keyPressed handles key detection
+	// doesn't allow the paddle to travel past window borders
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			if(player.getX() >= 600) {
 				player.setX(600);
 			}
 			else {
-				
 				// if the game hasn't started and player moves right
 				// ball moves to the right
 				if(!play) {
@@ -154,6 +166,8 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 			if(!play) {
 				player = new Paddle();
 				ball = new Ball();
+				// need to prepare this for more than 1 brick
+				brick1 = new Brick();
 				score = 0;
 				
 				repaint();

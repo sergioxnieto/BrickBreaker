@@ -44,6 +44,14 @@ public class Brick implements Entity {
 		this.dead = false;
 	}
 
+	public int getX() {
+		return this.x;
+	}
+	
+	public int getWidth() {
+		return this.width;
+	}
+	
 	public void setHP(int hp) {
 		this.hp = hp;
 	}
@@ -52,12 +60,12 @@ public class Brick implements Entity {
 		return this.hp;
 	}
 	
-	public void Dead() {
-		this.dead = true;
-	}
-	
 	public boolean isDead() {
-		return this.dead;
+		if(this.hp == 0) {
+			return this.dead = true;
+		}
+		else
+			return this.dead = false;
 	}
 	
 	@Override
