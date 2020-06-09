@@ -1,6 +1,6 @@
 package BrickBreak;
 
-public class Entity {
+public interface Entity {
 
 	
 	
