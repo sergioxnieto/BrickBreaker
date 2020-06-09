@@ -14,9 +14,9 @@ public class BrickBreak {
 		obj.setBounds(ss.width/2 - frameSize.width/2, ss.height/2 - frameSize.height/2, frameSize.width, frameSize.height);
 		obj.setTitle("Brick Break");
 		obj.setResizable(false);
-		obj.setVisible(true);
 		obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		obj.add(game);
+		obj.setVisible(true);
 
 	}
 
