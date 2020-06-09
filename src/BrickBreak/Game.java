@@ -18,7 +18,9 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	private boolean newColor = false;
 	
 	private int score = 0;
-	private int totalBricks = 28;
+	private int totalBricks = 21;
+	private int rows = 3, cols = 7;
+	private BricksGenerator bricks;
 	
 	private Timer timer;
 	private int delay = 8;
@@ -30,6 +32,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	
 	// Constructor
 	public Game() {
+		bricks = new BricksGenerator(rows, cols);
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
@@ -37,11 +40,10 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		timer.start();
 	}
 	
-	//Background bg = new Background();
-	//BackgroundDecorator cbg = new BackgroundDecorator(Background b);
+	// Instantiations
 	Paddle player = new Paddle();
 	Ball ball = new Ball();
-	Brick brick1 = new Brick();
+	//Brick brick1 = new Brick();
 	
 	// Handles drawing features to the game window
 	public void paint(Graphics g) {
@@ -51,6 +53,16 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 			cbg.paint(g);
 		}
 		
+		// draw bricks if they're still alive
+		for(int i = 0; i < bricks.map.length; i++) {
+			for(int j = 0; j < bricks.map[i].length; j++) {
+				if(!(bricks.map[i][j].isDead())) {
+					bricks.map[i][j].paint(g);
+				}
+				
+			}
+		}
+		
 		// display paddle
 		player.paint(g);
 		
@@ -58,8 +70,8 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		ball.paint(g);
 		
 		// display brick(s)
-		if(!brick1.isDead())
-			brick1.paint(g);
+		//if(!brick1.isDead())
+		//	brick1.paint(g);
 		
 		// display score
 		g.setColor(Color.white);
@@ -109,6 +121,32 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 			// Detect collision between ball and bricks
 			// Currently handles one brick need to update
 			// to handle more than one brick
+			
+			for(int i = 0; i < bricks.map.length; i++) {
+				for(int j = 0; j < bricks.map[i].length; j++) {
+					Brick tmp = bricks.map[i][j];
+					if(ball.generateHitbox().intersects(tmp.generateHitbox())) {
+						// check to see if brick is alive
+						if(!(tmp.isDead())) {
+							// kill a living brick
+							tmp.setHP(tmp.getHP() - 1);
+							
+							// ball redirection
+							if((ball.getX() + 19 <= tmp.getX()) || (ball.getX() >= tmp.getX() + tmp.getWidth())) {
+								ball.setXdir(-(ball.getXdir()));
+							}
+							else {
+								ball.setYdir(-(ball.getYdir()));
+							}
+						}
+						
+					}
+					
+				}
+			}
+			
+			
+			/*
 			if(ball.generateHitbox().intersects(brick1.generateHitbox())) {
 				// first check if the brick is alive
 				if(!brick1.isDead()) {
@@ -127,6 +165,8 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 				}
 				
 			}
+			*/
+			
 			
 			// Changes the trajectory if it hits the borders
 			ball.setX(ball.getX() + ball.getXdir());
@@ -179,7 +219,6 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 				player = new Paddle();
 				ball = new Ball();
 				// need to prepare this for more than 1 brick
-				brick1 = new Brick();
 				score = 0;
 				
 				repaint();

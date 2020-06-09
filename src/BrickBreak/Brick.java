@@ -35,9 +35,9 @@ public class Brick implements Entity {
 		
 	// Total bricks will be 4 rows and 7 columns so 28 total 
 	
-	Brick(int mult) {
-		this.x = 75;
-		this.y = (mult*60) + 50;
+	Brick(int row, int col) {
+		this.x = (row * 80) + 75;
+		this.y = (col * 60) + 50;
 		this.width = 77;
 		this.height = 50;
 		this.hp = 1;
