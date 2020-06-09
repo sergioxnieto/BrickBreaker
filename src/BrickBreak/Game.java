@@ -14,10 +14,19 @@ import javax.swing.JPanel;
 public class Game extends JPanel implements KeyListener, ActionListener {
 
 	private boolean play = false;
+	private boolean firstOpen = true;
+	private boolean newColor = false;
+	
 	private int score = 0;
 	private int totalBricks = 28;
+	
 	private Timer timer;
 	private int delay = 8;
+	
+	// Factory to generate background
+	EntityFactory factory = new EntityFactory();
+	Entity bg = factory.getEntity("BLACK");
+	Entity cbg = factory.getEntity("BLUE");
 	
 	// Constructor
 	public Game() {
@@ -28,16 +37,19 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		timer.start();
 	}
 	
-	// Intermediate instantiations until factory is setup
+	//Background bg = new Background();
+	//BackgroundDecorator cbg = new BackgroundDecorator(Background b);
 	Paddle player = new Paddle();
 	Ball ball = new Ball();
 	Brick brick1 = new Brick();
 	
 	// Handles drawing features to the game window
 	public void paint(Graphics g) {
-		// display background
-		g.setColor(Color.black);
-		g.fillRect(0, 0, 700, 600);
+		// display background as black unless user chooses to switch
+		bg.paint(g);
+		if(newColor) {
+			cbg.paint(g);
+		}
 		
 		// display paddle
 		player.paint(g);
@@ -171,6 +183,11 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 				score = 0;
 				
 				repaint();
+			}
+		}
+		if(e.getKeyCode() == KeyEvent.VK_C) {
+			if(!play) {
+				newColor = true;
 			}
 		}
 		
