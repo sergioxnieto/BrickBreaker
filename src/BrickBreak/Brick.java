@@ -24,19 +24,8 @@ public class Brick implements Entity {
 		this.dead = false;
 	}
 	
-	// Formula for placing rectangles along x position
-		
-	// 80 is brick width + 3 so that there is a gap between them
-	// (brickNum * 80) + 75
-	
-	// Formula for placing rectangles along x position
-	// 60 is bright height + 10 so that there is a large gap
-	// (brickNum * 60) + 50;
-		
-	// Total bricks will be 4 rows and 7 columns so 28 total 
-	
 	Brick(int row, int col) {
-		this.x = (row * 80) + 75;
+		this.x = (row * 85) + 60;
 		this.y = (col * 60) + 50;
 		this.width = 77;
 		this.height = 50;

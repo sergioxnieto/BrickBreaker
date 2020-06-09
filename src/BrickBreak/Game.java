@@ -14,18 +14,19 @@ import javax.swing.JPanel;
 public class Game extends JPanel implements KeyListener, ActionListener {
 
 	private boolean play = false;
-	private boolean firstOpen = true;
+	private boolean firstRun = true;
 	private boolean newColor = false;
 	
 	private int score = 0;
-	private int totalBricks = 21;
 	private int rows = 3, cols = 7;
+	private int totalBricks = rows * cols;
+	
 	private BricksGenerator bricks;
 	
 	private Timer timer;
 	private int delay = 8;
 	
-	// Factory to generate background
+	// Implementation of the Factory to generate background
 	EntityFactory factory = new EntityFactory();
 	Entity bg = factory.getEntity("BLACK");
 	Entity cbg = factory.getEntity("BLUE");
@@ -43,7 +44,6 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	// Instantiations
 	Paddle player = new Paddle();
 	Ball ball = new Ball();
-	//Brick brick1 = new Brick();
 	
 	// Handles drawing features to the game window
 	public void paint(Graphics g) {
@@ -69,18 +69,25 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		// display ball
 		ball.paint(g);
 		
-		// display brick(s)
-		//if(!brick1.isDead())
-		//	brick1.paint(g);
-		
 		// display score
 		g.setColor(Color.white);
 		g.setFont(new Font("serif", Font.BOLD, 25));
 		g.drawString(""+score, 590, 30);
 		
+		// display title screen
+		if(firstRun) {
+			play = false;
+			g.setColor(Color.green);
+			g.setFont(new Font("serif", Font.BOLD, 30));
+			g.drawString("Brick Break", 270, 300);
+			g.setFont(new Font("serif", Font.BOLD, 20));
+			g.drawString("Press Left/Right Arrow to Begin", 220, 350);
+			g.setFont(new Font("serif", Font.BOLD, 15));
+			g.drawString("Press C key to change color", 220, 370);
+		}
+		
 		// display victory screen and stop ball/game
-		/*
-		if(bricks empty) {
+		if(totalBricks == 0) {
 			play = false;
 			ball.setXdir(0);
 			ball.setYdir(0);
@@ -90,7 +97,6 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 			g.setFont(new Font("serif", Font.BOLD, 20));
 			g.drawString("Press Enter to Restart", 260, 350);
 		}
-		*/
 		
 		// display gameover and stop ball/game
 		if(ball.getY() > 570) {
@@ -119,10 +125,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 			}
 		
 			// Detect collision between ball and bricks
-			// Currently handles one brick need to update
-			// to handle more than one brick
-			
-			for(int i = 0; i < bricks.map.length; i++) {
+			A: for(int i = 0; i < bricks.map.length; i++) {
 				for(int j = 0; j < bricks.map[i].length; j++) {
 					Brick tmp = bricks.map[i][j];
 					if(ball.generateHitbox().intersects(tmp.generateHitbox())) {
@@ -130,14 +133,18 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 						if(!(tmp.isDead())) {
 							// kill a living brick
 							tmp.setHP(tmp.getHP() - 1);
-							
-							// ball redirection
+							totalBricks--;
+							score += 5;
+							// ball redirection after collision
 							if((ball.getX() + 19 <= tmp.getX()) || (ball.getX() >= tmp.getX() + tmp.getWidth())) {
 								ball.setXdir(-(ball.getXdir()));
 							}
 							else {
 								ball.setYdir(-(ball.getYdir()));
 							}
+							// exit to the outermost loop so that it
+							// ensure to only register one hit at a time
+							break A;
 						}
 						
 					}
@@ -145,30 +152,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 				}
 			}
 			
-			
-			/*
-			if(ball.generateHitbox().intersects(brick1.generateHitbox())) {
-				// first check if the brick is alive
-				if(!brick1.isDead()) {
-					// kill normal brick // -1 hp to super brick
-					brick1.setHP(brick1.getHP() - 1);
-				
-					// ball redirection
-					// if ballRS hits brickLS or ballLS hits brickRS
-					if((ball.getX() + 19 <= brick1.getX()) || (ball.getX() >= brick1.getX() + brick1.getWidth())) {
-						ball.setXdir(-(ball.getXdir()));
-					}
-					else {
-						ball.setYdir(-(ball.getYdir()));
-					}
-					
-				}
-				
-			}
-			*/
-			
-			
-			// Changes the trajectory if it hits the borders
+			// Changes ball trajectory if it hits the window borders
 			ball.setX(ball.getX() + ball.getXdir());
 			ball.setY(ball.getY() + ball.getYdir());
 			if(ball.getX() <= 0) {
@@ -202,6 +186,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 					ball.setXdir(1);
 				}
 				play = true;
+				firstRun = false;
 				player.moveRight();
 			}
 		}
@@ -211,6 +196,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 			}
 			else {
 				play = true;
+				firstRun = false;
 				player.moveLeft();
 			}
 		}
@@ -218,9 +204,9 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 			if(!play) {
 				player = new Paddle();
 				ball = new Ball();
-				// need to prepare this for more than 1 brick
 				score = 0;
-				
+				totalBricks = 21;
+				bricks = new BricksGenerator(rows, cols);
 				repaint();
 			}
 		}

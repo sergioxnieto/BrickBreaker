@@ -12,7 +12,7 @@ public class EntityFactory {
 	         
 	    } else if(entityType.equalsIgnoreCase("BLUE")){
 	    	
-	    	// implementation of the decorator pattern
+	    	// implementation of the decorator pattern:
 	    	// takes in a background object and colors over it
 	    	// with the color blue
 	    	

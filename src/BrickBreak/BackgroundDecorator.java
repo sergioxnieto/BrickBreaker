@@ -11,7 +11,7 @@ public class BackgroundDecorator extends EntityDecorator {
 	}
 
 	
-	// Will decorate over the original background with the color blue
+	// Decorates over the original background with the color blue
 	
 	@Override
 	public void paint(Graphics g) {
